@@ -1,48 +1,23 @@
 $(function(){
-    $("#efetuarLogin").click(function(){
 
-        var dados = $('#formLogin').serialize();
+        $("#efetuarLogin").click(function(){
 
-        $.ajax({
-            url: "/auth/login",
-            type:"POST",
-            data: dados,
-            dataType: "JSON"
-        }).done(function(result) {
+            var dados = $('#formLogin').serialize();
 
-            alert(result);
+            $.ajax({
+                url: "/auth/login",
+                type:"POST",
+                data: dados,
+                dataType: "JSON"
+            }).done(function(result) {
 
-            /*
-            if(result.success == true){
-                window.location.assign(result.redirect);
-            }else{
-                alert('Usuario ou Senha inválidos');
-            }*/
+                alert(result);
 
-        }).fail(function(jqXHR,textStatus,errorThrown){
-            console.log(errorThrown);
+            }).fail(function(jqXHR,textStatus,errorThrown){
+             console.log(errorThrown);
         })
     });
 
-
-    $("#logOut").click(function(){
-
-        $.ajax({
-            url: "/auth/logout",
-            type:"POST",
-            dataType: "JSON"
-        }).done(function(result) {
-
-            if(result.success == true){
-                window.location.assign(result.redirect);
-            }else{
-                alert('Não foi Possivel executar esta ação');
-            }
-
-        }).fail(function(jqXHR,textStatus,errorThrown){
-            console.log(errorThrown);
-        })
-    });
 });
 
 /**

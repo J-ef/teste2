@@ -11,42 +11,40 @@ use Zend\View\Model\ViewModel;
 
 class AuthController extends AbstractActionController
 {
-
-
     /**
      * @var AuthenticationServiceInterface
      */
     private $authService;
 
+    public function __construct(AuthenticationServiceInterface $authService)
+    {
 
+        $this->authService = $authService;
+    }
 
-    public function loginAction(){
+    public function loginAction()
+    {
 
         /** @var \Zend\Http\Request $request */
-        $request = $this ->getRequest();
-        if($request ->isXmlHttpRequest()) {
+        $request = $this->getRequest();
+        if ($request->isXmlHttpRequest()) {
             if ($request->isPost()) {
-                $formData = $request->getPost();
-                /*Aqui, após pegar todos os dados passados via Post, verificar uma maneira de valiadar os dados que vieram, seja um a um ou  array completo*/
 
-                $usuario = $request->getPost('usuario');
-                var_dump($usuario);
-                /** @var CallbackCheckAdapter $authAdpter*/
+                /** @var CallbackCheckAdapter $authAdpter */
                 $authAdpter = $this->authService->getAdapter();
                 $authAdpter->setIdentity($request->getPost('usuario'));
                 $authAdpter->setCredential($request->getPost('senha'));
 
 
-
-                $result = $this ->authService->authenticate();
-                if( $result->isValid()){
+                $result = $this->authService->authenticate();
+                if ($result->isValid()) {
                     $data = new JsonModel(array(
-                        'success'         => true,
-                        'redirect'        => 'app/dashboard',
+                        'success' => true,
+                        'redirect' => 'app/dashboard',
                         'responseMessage' => 'Login efetuado com sucesso'
                     ));
                     return $data;
-                }else{
+                } else {
                     $data = new JsonModel(array(
                         'success' => false,
                         'redirect' => '',
@@ -59,11 +57,5 @@ class AuthController extends AbstractActionController
 
 
     }
-
-
-    public function logoutAction(){
-
-        return new ViewModel();
-
-    }
 }
+
