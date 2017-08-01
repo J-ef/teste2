@@ -27,9 +27,6 @@ class Module implements ConfigProviderInterface    ,ServiceProviderInterface ,Co
         return [
 
         ];
-
-
-
     }
 
 

@@ -23,14 +23,14 @@ class AuthController extends AbstractActionController
     }
 
     public function loginAction()
-    {
-
         /** @var \Zend\Http\Request $request */
+    {
         $request = $this->getRequest();
         if ($request->isXmlHttpRequest()) {
+
             if ($request->isPost()) {
 
-                /** @var CallbackCheckAdapter $authAdpter */
+                /** @var CallbackCheckAdapter $authAdpter*/
                 $authAdpter = $this->authService->getAdapter();
                 $authAdpter->setIdentity($request->getPost('usuario'));
                 $authAdpter->setCredential($request->getPost('senha'));

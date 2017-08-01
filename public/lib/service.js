@@ -1,6 +1,6 @@
 $(function(){
 
-        $("#efetuarLogin").click(function(){
+    $("#efetuarLogin").click(function(){
 
             var dados = $('#formLogin').serialize();
 
@@ -8,7 +8,7 @@ $(function(){
                 url: "/auth/login",
                 type:"POST",
                 data: dados,
-                dataType: "JSON"
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8"
             }).done(function(result) {
 
                 alert(result);

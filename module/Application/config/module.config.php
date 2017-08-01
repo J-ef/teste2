@@ -7,6 +7,7 @@
 
 namespace Application;
 
+
 use Application\Controller\AuthController;
 use Application\Controller\Factory\AuthControllerFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -16,7 +17,7 @@ use Dashboard\Controller\DashboardController;
 use Index\Controller\IndexController;
 
 return [
-   'router' => [
+    'router' => [
         'routes' => [
             'home' => [
                 'type' => Literal::class,
@@ -85,23 +86,23 @@ return [
             ],
         ],
 
-       'doctrine' =>[
-           'driver' =>[
-               'DB_Driver' =>[
-                   'class'=>AnnotationDriver::class,
-                   'cache'=>'array',
-                   'paths'=>[
-                       __DIR__ . '/../src/Entity'
+        'doctrine' =>[
+            'driver' =>[
+                'Application_Driver' =>[
+                    'class'=>AnnotationDriver::class,
+                    'cache'=>'array',
+                    'paths'=>[
+                        __NAMESPACE__ . '/Entity'
 
-                   ]
-               ],
-               'orm_default'=>[
-                   'drivers'=>[
-                       'Application\Entity'=>'DB_Driver'
-                   ]
-               ]
-           ]
-       ],
+                    ]
+                ],
+                'orm_default'=>[
+                    'drivers'=>[
+                        'Application\Entity'=>'Application_Driver'
+                    ]
+                ]
+            ]
+        ],
     ]
 
 

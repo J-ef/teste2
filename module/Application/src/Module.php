@@ -17,18 +17,35 @@ use Zend\ModuleManager\Feature\ControllerProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\MvcEvent;
 
-
-class Module implements ConfigProviderInterface ,ServiceProviderInterface ,ControllerProviderInterface {
-
+class Module implements ConfigProviderInterface ,ServiceProviderInterface ,ControllerProviderInterface
+{
     const VERSION = '3.0.3-dev';
 
-    public function getConfig(){
+    public function getConfig() {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-
     /*Funçao que detecta o caminhoa acessado e determina qual layout ultilizar*/
-    public function onBootstrap(MvcEvent  $e){
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $eventManager = $e->getApplication()->getEventManager();
+        $container = $e->getApplication()->getServiceManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH,
+            function (MvcEvent $e) use ($container) {
+                $match = $e->getRouteMatch();
+                $authService = $container->get(AuthenticationServiceInterface::class);
+                $routeName = $match->getMatchedRouteName();
+                if ($authService->hasIdentity()) {
+                    return;
+                } elseif (strpos($routeName, 'admin') !== false) {
+                    $match->setParam('controller', AuthController::class)
+                        ->setParam('action', 'login');
+                }
+            }, 0);
+    }
+
+    public function onloadPage(MvcEvent  $e){
         $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', 'dispatch', function($e) {
             /** @var MvcEvent $e*/
             $controller      = $e->getTarget();
@@ -40,8 +57,9 @@ class Module implements ConfigProviderInterface ,ServiceProviderInterface ,Contr
                 $controller->layout($config['module_layouts'][$moduleNamespace]);
                 var_dump($controllerClass);
             }
-        }, 0);
+        }, 1);
     }
+
 
 
     public function getControllerConfig(){
@@ -66,5 +84,4 @@ class Module implements ConfigProviderInterface ,ServiceProviderInterface ,Contr
         ];
 
     }
-
 }
